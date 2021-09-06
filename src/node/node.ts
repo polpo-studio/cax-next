@@ -4,6 +4,7 @@ import DisplayProps from '../geom/displayProps';
 import Rectangle from '../geom/rectangle';
 import Matrix2D from '../geom/matrix2d';
 import Graphics from '../node/graphics';
+import Stage from './stage';
 
 const _eventListeners: unique symbol = Symbol('eventListeners');
 const _captureEventListeners: unique symbol = Symbol('captureEventListeners');
@@ -89,13 +90,14 @@ export default class Node {
     this.ignoreHit = false;
   }
 
-  get stage() {
+  get stage(): Stage | undefined {
     let o = this;
     while (o.parent) {
       o = o.parent;
     }
-    if (o.___instanceof === 'Stage') return o;
-    return null;
+    if (o.___instanceof === 'Stage') {
+      return o as unknown as Stage
+    }
   }
 
   get scale() {

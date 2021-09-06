@@ -38,6 +38,17 @@ export default class Group extends Node {
     this.children.splice(index, 1);
   }
 
+  removeLastChild() {
+    let len = this.children.length || 0
+    if (len > 0) {
+      let child = this.children[len-1];
+      if (child) {
+        child.parent = null;
+      }
+      this.children.pop();
+    }
+  }
+
   replace(current: number, pre: any) {
     const index = pre.parent.children.indexOf(pre);
     this.removeChildAt(index);
