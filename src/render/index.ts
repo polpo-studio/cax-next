@@ -87,7 +87,6 @@ export default class Render {
   }
 
   _applyShadow(ctx: any, shadow: Shadow) {
-    shadow = shadow;
     ctx.shadowColor = shadow.color;
     ctx.shadowOffsetX = shadow.offsetX;
     ctx.shadowOffsetY = shadow.offsetY;

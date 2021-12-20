@@ -3,6 +3,7 @@ import DisplayProps from '../geom/displayProps';
 import Rectangle from '../geom/rectangle';
 import Matrix2D from '../geom/matrix2d';
 import Graphics from '../node/graphics';
+import Stage from './stage';
 declare const _eventListeners: unique symbol;
 declare const _captureEventListeners: unique symbol;
 interface EventListeners {
@@ -47,7 +48,7 @@ export default class Node {
     ignoreHit: boolean;
     ___instanceof: string;
     constructor();
-    get stage(): this;
+    get stage(): Stage | undefined;
     get scale(): number;
     set scale(scale: number);
     isVisible(): boolean;

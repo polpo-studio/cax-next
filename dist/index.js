@@ -162,7 +162,7 @@ class DisplayProps {
         this.setValue(visible, alpha, shadow, compositeOperation, matrix);
     }
     setValue(visible, alpha, shadow, compositeOperation, matrix) {
-        this.visible = visible == null ? true : !!visible;
+        this.visible = visible == null ? true : visible;
         this.alpha = alpha == null ? 1 : alpha;
         this.shadow = shadow || null;
         this.compositeOperation = compositeOperation || null;
@@ -825,25 +825,6 @@ exports.default = Rectangle;
 
 "use strict";
 
-var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
-    if (k2 === undefined) k2 = k;
-    Object.defineProperty(o, k2, { enumerable: true, get: function() { return m[k]; } });
-}) : (function(o, m, k, k2) {
-    if (k2 === undefined) k2 = k;
-    o[k2] = m[k];
-}));
-var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (function(o, v) {
-    Object.defineProperty(o, "default", { enumerable: true, value: v });
-}) : function(o, v) {
-    o["default"] = v;
-});
-var __importStar = (this && this.__importStar) || function (mod) {
-    if (mod && mod.__esModule) return mod;
-    var result = {};
-    if (mod != null) for (var k in mod) if (k !== "default" && Object.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
-    __setModuleDefault(result, mod);
-    return result;
-};
 var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
@@ -863,7 +844,6 @@ const ellipse_1 = __importDefault(__webpack_require__(/*! ./node/shape/ellipse *
 const polygon_1 = __importDefault(__webpack_require__(/*! ./node/shape/polygon */ "./src/node/shape/polygon.ts"));
 const sector_1 = __importDefault(__webpack_require__(/*! ./node/shape/sector */ "./src/node/shape/sector.ts"));
 const equilateral_polygon_1 = __importDefault(__webpack_require__(/*! ./node/shape/equilateral-polygon */ "./src/node/shape/equilateral-polygon.ts"));
-const utils = __importStar(__webpack_require__(/*! ./utils/util */ "./src/utils/util.ts"));
 const cax = {
     Render: index_1.default,
     Stage: stage_1.default,
@@ -880,7 +860,6 @@ const cax = {
     Polygon: polygon_1.default,
     Sector: sector_1.default,
     EquilateralPolygon: equilateral_polygon_1.default,
-    loadImage: utils.loadImage,
 };
 exports.default = cax;
 
@@ -902,25 +881,30 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const node_1 = __importDefault(__webpack_require__(/*! ./node */ "./src/node/node.ts"));
 class Bitmap extends node_1.default {
-    constructor(img) {
+    constructor(url) {
         super();
-        if (Bitmap.cache[img.src]) {
-            this.img = Bitmap.cache[img.src];
-            this.rect = [0, 0, this.img.width, this.img.height];
-            this.width = this.img.width;
-            this.height = this.img.height;
-        }
-        else {
-            this.img = img;
-            this.rect = [0, 0, img.width, img.height];
-            this.width = img.width;
-            this.height = img.height;
-            Bitmap.cache[img.src] = img;
-        }
+        this.url = url;
     }
     render(ctx) {
-        let rect = this.rect;
-        ctx.drawImage(this.img, rect[0], rect[1], rect[2], rect[3], 0, 0, rect[2], rect[3]);
+        var _a;
+        if (this.img) {
+            let rect = this.rect;
+            ctx.drawImage(this.img, rect[0], rect[1], rect[2], rect[3], 0, 0, rect[2], rect[3]);
+        }
+        else {
+            // @ts-ignore
+            (_a = this.stage) === null || _a === void 0 ? void 0 : _a.loadImage(this.url).then((img) => {
+                this.img = img;
+                this.rect = [0, 0, img.width, img.height];
+                this.width = img.width;
+                this.height = img.height;
+                let rect = this.rect;
+                ctx.drawImage(this.img, rect[0], rect[1], rect[2], rect[3], 0, 0, rect[2], rect[3]);
+                Bitmap.cache[img.src] = img;
+            }).catch((err) => {
+                console.log('Bitmap: Error loading image: ' + err, this.url);
+            });
+        }
     }
 }
 Bitmap.cache = {};
@@ -1137,6 +1121,16 @@ class Group extends node_1.default {
         }
         this.children.splice(index, 1);
     }
+    removeLastChild() {
+        let len = this.children.length || 0;
+        if (len > 0) {
+            let child = this.children[len - 1];
+            if (child) {
+                child.parent = null;
+            }
+            this.children.pop();
+        }
+    }
     replace(current, pre) {
         const index = pre.parent.children.indexOf(pre);
         this.removeChildAt(index);
@@ -1318,9 +1312,9 @@ class Node {
         while (o.parent) {
             o = o.parent;
         }
-        if (o.___instanceof === 'Stage')
+        if (o.___instanceof === 'Stage') {
             return o;
-        return null;
+        }
     }
     get scale() {
         return this.scaleX;
@@ -2280,7 +2274,6 @@ class Render {
         }
     }
     _applyShadow(ctx, shadow) {
-        shadow = shadow;
         ctx.shadowColor = shadow.color;
         ctx.shadowOffsetX = shadow.offsetX;
         ctx.shadowOffsetY = shadow.offsetY;
@@ -2309,34 +2302,6 @@ let UID = {
     }
 };
 exports.default = UID;
-
-
-/***/ }),
-
-/***/ "./src/utils/util.ts":
-/*!***************************!*\
-  !*** ./src/utils/util.ts ***!
-  \***************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.loadImage = void 0;
-function loadImage(url, canvas) {
-    return new Promise((resolve, reject) => {
-        const image = canvas.createImage();
-        image.src = url;
-        image.onload = function () {
-            resolve(image);
-        };
-        image.onerror = function (error) {
-            reject(error);
-        };
-    });
-}
-exports.loadImage = loadImage;
 
 
 /***/ })
