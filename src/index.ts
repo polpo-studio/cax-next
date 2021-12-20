@@ -14,9 +14,7 @@ import Polygon from './node/shape/polygon';
 import Sector from './node/shape/sector';
 import EquilateralPolygon from './node/shape/equilateral-polygon';
 
-import * as utils from './utils/util';
 import { ScriptEvent } from './event/event';
-
 
 const cax = {
   Render,
@@ -34,7 +32,6 @@ const cax = {
   Polygon,
   Sector,
   EquilateralPolygon,
-  loadImage: utils.loadImage,
 };
 
 export default cax;

@@ -6,12 +6,13 @@ interface Cache {
     [x: string]: any;
 }
 declare class Bitmap extends Node {
-    img: Img;
-    rect: number[];
-    width: number;
-    height: number;
     static cache: Cache;
-    constructor(img: Img);
+    img?: Img;
+    rect?: number[];
+    width?: number;
+    height?: number;
+    url: string;
+    constructor(url: string);
     render(ctx: any): void;
 }
 export default Bitmap;

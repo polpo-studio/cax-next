@@ -25,7 +25,7 @@ export default class DisplayProps {
     compositeOperation?: string,
     matrix?: Matrix2D
   ) {
-    this.visible = visible == null ? true : !!visible;
+    this.visible = visible == null ? true : visible;
     this.alpha = alpha == null ? 1 : alpha;
     this.shadow = shadow || null;
     this.compositeOperation = compositeOperation || null;
