@@ -1,47 +1,40 @@
 import Node from './node';
+import { ILRUCache, MakeLRUCache } from '../utils/lru';
 
 interface Img {
   [x: string]: any;
 }
 
-interface Cache {
-  [x: string]: any;
-}
-
 class Bitmap extends Node {
-  static cache: Cache;
-  img?: Img;
-  rect?: number[];
-  width?: number;
-  height?: number;
-  url: string;
+  static cache: ILRUCache;
+  img: Img;
+  rect: number[];
+  width: number;
+  height: number;
 
-  constructor(url: string) {
+  constructor(img: Img) {
     super();
-    this.url = url;
+    let image = Bitmap.cache.get(img.src, false);
+    if (image) {
+      this.img = image;
+      this.rect = [0, 0, this.img.width, this.img.height];
+      this.width = this.img.width;
+      this.height = this.img.height;
+    } else {
+      this.img = img;
+      this.rect = [0, 0, img.width, img.height];
+      this.width = img.width;
+      this.height = img.height;
+      Bitmap.cache.put(img.src, image);
+    }
   }
 
   render(ctx: any) {
-    if (this.img) {
-      let rect = this.rect!;
-      ctx.drawImage(this.img, rect[0], rect[1], rect[2], rect[3], 0, 0, rect[2], rect[3]);
-    } else {
-      // @ts-ignore
-      this.stage?.loadImage(this.url).then((img: Img) => {
-        this.img = img;
-        this.rect = [0, 0, img.width, img.height];
-        this.width = img.width;
-        this.height = img.height;
-        let rect = this.rect!;
-        ctx.drawImage(this.img, rect[0], rect[1], rect[2], rect[3], 0, 0, rect[2], rect[3]);
-        Bitmap.cache[img.src] = img;
-      }).catch((err) => {
-        console.log('Bitmap: Error loading image: ' + err, this.url);
-      });
-    }
+    let rect = this.rect;
+    ctx.drawImage(this.img, rect[0], rect[1], rect[2], rect[3], 0, 0, rect[2], rect[3]);
   }
 }
 
-Bitmap.cache = {};
+Bitmap.cache = MakeLRUCache(50);
 
 export default Bitmap;
