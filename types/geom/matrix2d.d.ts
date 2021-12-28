@@ -36,9 +36,9 @@ declare class Matrix2D {
 
   isIdentity(): boolean
 
-  equals(): boolean
+  equals(matrix: Matrix2D): boolean
 
-  transformPoint()
+  transformPoint(x: number, y: number, pt?: { x: number, y: number }): { x: number, y: number }
 
   decompose(target: any): any
 
