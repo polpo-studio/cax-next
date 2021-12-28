@@ -47,7 +47,7 @@ export default class Render {
     if (mtx) {
       ctx.transform(mtx.a, mtx.b, mtx.c, mtx.d, mtx.tx, mtx.ty);
     }
-    mtx = o._props.matrix;
+    mtx = o._props.matrix as Matrix2D;
 
     if (mask) {
       mask.getMatrix(mtx);

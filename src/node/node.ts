@@ -199,11 +199,7 @@ export default class Node {
     this._bounds = (this._bounds || new Rectangle()).setValues(x, y, width, height);
   }
 
-  getTransformedBounds() {
-    return this._getBounds();
-  }
-
-  _getBounds(matrix?: Matrix2D, ignoreTransform?: boolean) {
+  _getBounds(matrix: Matrix2D, ignoreTransform?: boolean) {
     return this._transformBounds(this.getBounds(), matrix, ignoreTransform);
   }
 

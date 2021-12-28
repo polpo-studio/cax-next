@@ -55,13 +55,12 @@ export default class Node {
     clip(graphics: Graphics): void;
     unclip(): void;
     setTransform(x: number, y: number, scaleX: number, scaleY: number, rotation: number, skewX: number, skewY: number, regX: number, regY: number): this;
-    getMatrix(matrix: Matrix2D): any;
-    getConcatenatedMatrix(matrix: Matrix2D): any;
+    getMatrix(matrix: Matrix2D): Matrix2D;
+    getConcatenatedMatrix(matrix: Matrix2D): Matrix2D;
     getConcatenatedDisplayProps(props?: DisplayProps): DisplayProps;
     getBounds(): Rectangle;
     setBounds(x: number | null, y: number, width: number, height: number): void;
-    getTransformedBounds(): Rectangle;
-    _getBounds(matrix?: Matrix2D, ignoreTransform?: boolean): Rectangle;
+    _getBounds(matrix: Matrix2D, ignoreTransform?: boolean): Rectangle;
     _transformBounds(bounds: Rectangle | null, matrix: Matrix2D, ignoreTransform?: boolean): Rectangle;
     on(type: string, listener: (event: ScriptEvent) => void, options?: EventOptions | boolean): void;
     off(type: string, listener: (event: ScriptEvent) => void, options?: EventOptions | boolean): void;

@@ -1379,9 +1379,6 @@ class Node {
         }
         this._bounds = (this._bounds || new rectangle_1.default()).setValues(x, y, width, height);
     }
-    getTransformedBounds() {
-        return this._getBounds();
-    }
     _getBounds(matrix, ignoreTransform) {
         return this._transformBounds(this.getBounds(), matrix, ignoreTransform);
     }
