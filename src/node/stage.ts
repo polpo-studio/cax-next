@@ -9,7 +9,7 @@ class Stage extends Group {
   container: any;
   width: number;
   height: number;
-  drp!: number;
+  dpr!: number;
   ctx: any;
   render: Render;
   hitCtx: any;
