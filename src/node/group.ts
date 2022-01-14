@@ -49,8 +49,8 @@ export default class Group extends Node {
     }
   }
 
-  replace(current: number, pre: any) {
-    const index = pre.parent.children.indexOf(pre);
+  replace(current: any, previous: any) {
+    const index = previous.parent.children.indexOf(previous);
     this.removeChildAt(index);
     this.addChildAt(current, index);
   }

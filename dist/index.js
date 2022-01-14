@@ -1128,8 +1128,8 @@ class Group extends node_1.default {
             this.children.pop();
         }
     }
-    replace(current, pre) {
-        const index = pre.parent.children.indexOf(pre);
+    replace(current, previous) {
+        const index = previous.parent.children.indexOf(previous);
         this.removeChildAt(index);
         this.addChildAt(current, index);
     }

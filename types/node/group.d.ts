@@ -7,7 +7,7 @@ export default class Group extends Node {
     addChildAt(child: any, index: number): void;
     removeChildAt(index: number): void;
     removeLastChild(): void;
-    replace(current: number, pre: any): void;
+    replace(current: any, previous: any): void;
     remove(child: any): void;
     empty(): void;
     destroy(): void;
